@@ -20,44 +20,38 @@ import java.util.Collections;
 @EnableWebSecurity
 public class AppConfig {
 
-    @Bean
-    SecurityFilterChain springSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(Management->Management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize->Authorize.requestMatchers("/api/**").authenticated()
+    @Bean(name = "customSecurityFilterChain")  // Explicitly name your SecurityFilterChain bean
+    SecurityFilterChain customSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf->csrf.disable())
-                .cors(cors->cors.configurationSource(corsConfigurationSource()));
-
-
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         return http.build();
     }
 
-    private CorsConfigurationSource corsConfigurationSource(){
-        return new CorsConfigurationSource(){
-
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration cfg = new CorsConfiguration();
-                cfg.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:3000",
-                        "http://localhost:5173",
-                        "http://localhost:4200"
-                ));
-                cfg.setAllowedMethods(Collections.singletonList("*"));
-                cfg.setAllowCredentials(true);
-                cfg.setAllowedHeaders(Collections.singletonList("*"));
-                cfg.setExposedHeaders(Arrays.asList("Authorization"));
-                cfg.setMaxAge(3600L);
-
-                return cfg;
-            }
-        };
-
-    }
     @Bean
-    PasswordEncoder passwordEncoder(){
+    CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            CorsConfiguration cfg = new CorsConfiguration();
+            cfg.setAllowedOrigins(Arrays.asList(
+                    "http://localhost:3000",
+                    "http://localhost:5173",
+                    "http://localhost:4200"
+            ));
+            cfg.setAllowedMethods(Collections.singletonList("*"));
+            cfg.setAllowCredentials(true);
+            cfg.setAllowedHeaders(Collections.singletonList("*"));
+            cfg.setExposedHeaders(Arrays.asList("Authorization"));
+            cfg.setMaxAge(3600L);
+            return cfg;
+        };
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
