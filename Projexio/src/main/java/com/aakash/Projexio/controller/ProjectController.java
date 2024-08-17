@@ -4,14 +4,13 @@ import com.aakash.Projexio.model.Chat;
 import com.aakash.Projexio.model.Invitation;
 import com.aakash.Projexio.model.Project;
 import com.aakash.Projexio.model.User;
-import com.aakash.Projexio.repository.InviteRequest;
+import com.aakash.Projexio.request.InviteRequest;
 import com.aakash.Projexio.response.MessageResponse;
 import com.aakash.Projexio.service.InvitationService;
 import com.aakash.Projexio.service.ProjectService;
 import com.aakash.Projexio.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
