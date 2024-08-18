@@ -28,7 +28,7 @@ const Navbar = () => {
           </DialogContent>
         </Dialog>
 
-        <Button varaint="ghost">Upgrade Plan</Button>
+        <Button onClick={()=>navigate("/upgrade_plan")} varaint="ghost">Upgrade Plan</Button>
       </div>
 
       <div className="flex gap-3 items-center ">
