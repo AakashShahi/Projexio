@@ -20,13 +20,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private UserService userService;
 
+    @Autowired
     private ChatService chatService;
 
     @Override
     public Project createProject(Project project, User user) throws Exception {
         Project createdProject = new Project();
         createdProject.setOwner(user);
-        createdProject.setTags(createdProject.getTags());
+        createdProject.setTags(project.getTags());
         createdProject.setName(project.getName());
         createdProject.setCategory(project.getCategory());
         createdProject.setDescription(project.getDescription());
@@ -47,12 +48,15 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Project> getAllProjectsByTeam(User user, String category, String tag) throws Exception {
         List<Project> projects = projectRepository.findByTeamContainingOrOwner(user,user);
 
-        if(category==null){
-            projects=projects.stream().filter(project -> project.getCategory().equals(category))
+        if (category != null) {
+            projects = projects.stream()
+                    .filter(project -> project.getCategory() != null && project.getCategory().equals(category))
                     .collect(Collectors.toList());
         }
-        if(tag==null){
-            projects=projects.stream().filter(project -> project.getTags().contains(tag))
+
+        if (tag != null) {
+            projects = projects.stream()
+                    .filter(project -> project.getTags() != null && project.getTags().contains(tag))
                     .collect(Collectors.toList());
         }
         return projects;

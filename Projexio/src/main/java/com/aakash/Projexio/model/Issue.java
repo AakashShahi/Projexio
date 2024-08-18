@@ -3,6 +3,7 @@ package com.aakash.Projexio.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,7 +22,10 @@ public class Issue {
     private String status;
     private Long projId;
     private String priority;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dueDate;
+
     private List<String> tags= new ArrayList<>();
 
     @ManyToOne
